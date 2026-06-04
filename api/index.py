@@ -3,6 +3,8 @@
 from fastapi import FastAPI
 # Import your CORS middleware
 from fastapi.middleware.cors import CORSMiddleware
+# Import StaticFiles for serving frontend assets
+from fastapi.staticfiles import StaticFiles
 
 # IMPORTANT: Import the routers from your other Python files
 # We rename them using 'as' so we don't confuse the two 'router' variables
@@ -25,9 +27,5 @@ app.add_middleware(
 # Tell the main app to include all endpoints from the users.py file
 app.include_router(funcs_router)
 
-# Tell the main app to include all endpoints from the posts.py file
-
-# You can still keep simple health-check routes in the main file
-@app.get("/")
-def read_root():
-    return {"message": "Main API is running. Try visiting /users or /posts."}
+# Mount the static/public directory at the root after other API routes are defined
+app.mount("/", StaticFiles(directory="public", html=True), name="public")

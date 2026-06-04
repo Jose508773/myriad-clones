@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Control Center | Webhook Sandbox</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header -->
+    <header class="main-header">
+      <div class="logo-area">
+        <div class="pulse-indicator"></div>
+        <h1>API Control Center</h1>
+        <span class="badge status-badge">Connected</span>
+      </div>
+      <div class="header-actions">
+        <span class="environment-tag">FastAPI Backend + Vercel</span>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Grid -->
+    <main class="dashboard-grid">
+      <!-- Users List Card -->
+      <section class="card glass-card" id="users-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <h2>Users Directory</h2>
+        </div>
+        <div class="card-body">
+          <p class="description">Select a user to inspect details or query their profile dynamically.</p>
+          <div id="users-list" class="badge-list">
+            <div class="loading-state">
+              <div class="spinner"></div>
+              <span>Fetching users...</span>
+            </div>
+          </div>
+          <button id="refresh-users-btn" class="btn btn-secondary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+            Refresh List
+          </button>
+        </div>
+      </section>
+
+      <!-- Inspector Card -->
+      <section class="card glass-card" id="inspector-card">
+        <div class="card-header">
+          <div class="card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h2>User Inspector</h2>
+        </div>
+        <div class="card-body">
+          <form id="inspect-form" class="inspect-form">
+            <div class="input-group">
+              <label for="user-id-input">Query User ID</label>
+              <div class="input-with-button">
+                <input type="number" id="user-id-input" placeholder="e.g., 42" min="1" required>
+                <button type="submit" class="btn btn-primary">Fetch Details</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="response-viewer">
+            <div class="response-header">
+              <span class="response-status" id="response-status-badge">Idle</span>
+              <span class="response-time" id="response-latency">- ms</span>
+            </div>
+            <pre class="code-block"><code id="response-output">{"status": "waiting_for_input", "instruction": "Enter a user ID or select a user from the directory above."}</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- Terminal / Logs Card -->
+      <section class="card glass-card full-width" id="logs-card">
+        <div class="card-header">
+          <div class="card-icon text-accent">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+          </div>
+          <h2>Live Request Console</h2>
+          <button id="clear-logs-btn" class="btn-text">Clear Console</button>
+        </div>
+        <div class="card-body console-body">
+          <div id="console-logs" class="console-logs">
+            <div class="console-line system">[System] Live Console Initialized. Waiting for API traffic...</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+      <p>&copy; 2026 Webhook Sandbox &bull; Built with FastAPI & Vercel</p>
+    </footer>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script src="main.js"></script>
+</body>
+</html>
