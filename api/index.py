@@ -1,4 +1,5 @@
 
+import os
 # Import the main FastAPI app class
 from fastapi import FastAPI
 # Import your CORS middleware
@@ -28,4 +29,8 @@ app.add_middleware(
 app.include_router(funcs_router)
 
 # Mount the static/public directory at the root after other API routes are defined
-app.mount("/", StaticFiles(directory="public", html=True), name="public")
+# We only do this if the folder exists (e.g. during local development).
+# On Vercel, the root "public" folder is served directly by the CDN, and the folder
+# doesn't exist within the serverless python lambda container.
+if os.path.exists("public"):
+    app.mount("/", StaticFiles(directory="public", html=True), name="public")
