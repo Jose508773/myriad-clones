@@ -1,0 +1,4 @@
+# The core FastAPI framework to build the API
+fastapi
+# The server required by Vercel to run the Python ASGI app
+uvicorn
