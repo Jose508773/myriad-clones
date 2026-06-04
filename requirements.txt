@@ -2,3 +2,5 @@
 fastapi
 # The server required by Vercel to run the Python ASGI app
 uvicorn
+# Required by FastAPI to serve static files
+aiofiles
