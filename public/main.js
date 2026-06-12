@@ -88,18 +88,7 @@ async function specialId() {
     return;
   }
 
-  if (usersid.length >= 1000) {
-    statusEl.innerText = 'Validation Error';
-    statusEl.className = 'status-badge error';
-    outputEl.innerText = '// All IDs from 1 to 1000 have been used.';
-    return;
-  }
-
-  let randomId;
-  do {
-    randomId = Math.floor(Math.random() * 1000) + 1;
-  } while (usersid.includes(randomId));
-
+  const randomId = Math.floor(Math.random() * 1000) + 1;
   usersid.push(randomId);
 
   try {
