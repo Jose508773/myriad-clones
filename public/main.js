@@ -102,12 +102,12 @@ async function specialId() {
 
   usersid.push(randomId);
 
-  statusEl.innerText = 'Loading...';
-  statusEl.className = 'status-badge loading';
-  outputEl.innerText = '// Sending special user data...';
-
   try {
-    const response = await fetch(`https://${url}/randomUserId`, {
+    statusEl.innerText = 'Loading...';
+    statusEl.className = 'status-badge loading';
+    outputEl.innerText = '// Sending special user data...';
+
+    let response = await fetch(`https://${url}/randomUserId`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,6 @@ async function specialId() {
         id: randomId
       })
     });
-
     const data = await response.json();
 
     statusEl.innerText = `HTTP ${response.status}`;
@@ -127,7 +126,6 @@ async function specialId() {
     } else {
       statusEl.className = 'status-badge error';
     }
-
     outputEl.innerText = JSON.stringify(data, null, 2);
   } catch (error) {
     statusEl.innerText = 'Error';
