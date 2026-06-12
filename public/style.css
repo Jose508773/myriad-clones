@@ -240,7 +240,7 @@ header p {
 
 #specialIdUsersContainer {
   display: grid;
-  grid-template-columns: 2fr auto;
+  grid-template-columns: 2fr 1fr auto;
   gap: 0.75rem;
   margin-bottom: 2rem;
   background: rgba(255, 255, 255, 0.02);
