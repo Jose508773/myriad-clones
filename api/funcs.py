@@ -19,4 +19,5 @@ def get_single_user(user_id: int):
 @router.post("/addUser")
 def add_user(user: dict):
     people.append(user)
-    return {"message": "User added successfully", "users": people}
+    return people
+
