@@ -1,9 +1,13 @@
+from pydantic import BaseModel
 from fastapi import APIRouter
 
 router = APIRouter()
 
-people = [
-]
+people = []
+
+class user(BaseModel):
+    name: str
+    age: int
 
 @router.get("/users")
 def get_users():
@@ -16,8 +20,8 @@ def get_single_user(user_id: int):
         return people[idx]
     return {"error": "User not found"}
 
+
 @router.post("/addUser")
-def add_user(user: dict):
+def add_user(user: user):
     people.append(user)
     return people
-
