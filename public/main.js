@@ -9,6 +9,8 @@ const btnSendUsers = document.getElementById('sendUsers');
 const userIdInput = document.getElementById('userIdInput');
 const userAgeInput = document.getElementById('userAgeInput');
 const btnSendSpecialIdUsers = document.getElementById('sendSpecialIdUsers');
+const searchIdInput = document.getElementById('searchIdInput');
+const btnSearchById = document.getElementById('btnSearchById');
 const statusEl = document.getElementById('status');
 const outputEl = document.getElementById('output');
 
@@ -112,6 +114,7 @@ async function specialId() {
     statusEl.innerText = `HTTP ${response.status}`;
     if (response.ok) {
       statusEl.className = 'status-badge success';
+      alert(`User added successfully! Your generated User ID is: ${randomId}`);
     } else {
       statusEl.className = 'status-badge error';
     }
@@ -123,6 +126,17 @@ async function specialId() {
   }
 }
 
+async function searchById() {
+  const id = searchIdInput.value;
+  if (!id) {
+    statusEl.innerText = 'Validation Error';
+    statusEl.className = 'status-badge error';
+    outputEl.innerText = '// Please enter a User ID to search.';
+    return;
+  }
+  await queryApi(`/users/${id}`);
+}
+
 // Event Listeners for Buttons
 btnUsers.addEventListener('click', () => queryApi('/users'));
 btnUser1.addEventListener('click', () => queryApi('/users/1'));
@@ -130,3 +144,4 @@ btnUser2.addEventListener('click', () => queryApi('/users/2'));
 btnUser3.addEventListener('click', () => queryApi('/users/3'));
 btnSendUsers.addEventListener('click', sendUsers);
 btnSendSpecialIdUsers.addEventListener('click', specialId);
+btnSearchById.addEventListener('click', searchById);
