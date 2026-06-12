@@ -5,6 +5,10 @@ router = APIRouter()
 
 people = []
 
+my_users = {
+    
+}
+
 class user(BaseModel):
     name: str
     age: int

@@ -6,6 +6,8 @@ const btnUser3 = document.getElementById('user3');
 const nameInput = document.getElementById('nameInput');
 const ageInput = document.getElementById('ageInput');
 const btnSendUsers = document.getElementById('sendUsers');
+const userIdInput = document.getElementById('userIdInput');
+const btnSendSpecialIdUsers = document.getElementById('sendSpecialIdUsers');
 const statusEl = document.getElementById('status');
 const outputEl = document.getElementById('output');
 
@@ -74,9 +76,21 @@ async function sendUsers() {
   }
 }
 
+async function specialId() {
+  const id = userIdInput.value;
+  if (!id) {
+    statusEl.innerText = 'Validation Error';
+    statusEl.className = 'status-badge error';
+    outputEl.innerText = '// Please provide a User ID.';
+    return;
+  }
+  await queryApi(`/users/${id}`);
+}
+
 // Event Listeners for Buttons
 btnUsers.addEventListener('click', () => queryApi('/users'));
 btnUser1.addEventListener('click', () => queryApi('/users/1'));
 btnUser2.addEventListener('click', () => queryApi('/users/2'));
 btnUser3.addEventListener('click', () => queryApi('/users/3'));
 btnSendUsers.addEventListener('click', sendUsers);
+btnSendSpecialIdUsers.addEventListener('click', specialId);
