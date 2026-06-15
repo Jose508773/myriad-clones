@@ -3,40 +3,42 @@ from fastapi import APIRouter
 
 router = APIRouter()
 
-people = []
+# ---- Two storage spots ----
+people = []       # simple users (no id)
+my_users = {}     # users with a random id  →  { 42: {"name": "Jose", "age": 20} }
 
-my_users = {}
-
-class user(BaseModel):
+# ---- Models: define what data the frontend must send ----
+class User(BaseModel):
     name: str
     age: int
 
-class SpecialUser(BaseModel):
+class UserWithId(BaseModel):
     name: str
     age: int
     id: int
 
+# ---- GET /users → return everyone ----
 @router.get("/users")
 def get_users():
     return people + [{"id": k, **v} for k, v in my_users.items()]
 
+# ---- GET /users/42 → return one user by id ----
 @router.get("/users/{user_id}")
 def get_single_user(user_id: int):
     if user_id in my_users:
-        return my_users[user_id]
-    idx = user_id - 1
-    if 0 <= idx < len(people):
-        return people[idx]
+        return {"id": user_id, **my_users[user_id]}
     return {"error": "User not found"}
 
+# ---- POST /addUser → add a simple user ----
 @router.post("/addUser")
-def add_user(user: user):
+def add_user(user: User):
     people.append(user)
     return people
 
+# ---- POST /randomUserId → add a user with a random id ----
 @router.post("/randomUserId")
-def update_user(user: SpecialUser):
+def add_user_with_id(user: UserWithId):
     if user.id in my_users:
-        return {"error": "ID already exists"}
+        return {"error": "ID already taken"}
     my_users[user.id] = {"name": user.name, "age": user.age}
     return my_users
