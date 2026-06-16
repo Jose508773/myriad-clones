@@ -1,8 +1,5 @@
 // ---- Grab all elements from the HTML by their id ----
-const btnUsers = document.getElementById('users');
-const btnUser1 = document.getElementById('user1');
-const btnUser2 = document.getElementById('user2');
-const btnUser3 = document.getElementById('user3');
+
 const nameInput = document.getElementById('nameInput');
 const ageInput = document.getElementById('ageInput');
 const btnSendUsers = document.getElementById('sendUsers');
@@ -17,6 +14,7 @@ const outputEl = document.getElementById('output');
 // ---- Config ----
 const url = "myriad-clones.vercel.app";
 const usedIds = []; // keeps track of all random IDs we've generated
+
 
 // ---- Helper: shows the result on screen ----
 function showResult(response, data) {
@@ -111,10 +109,7 @@ async function searchById() {
 }
 
 // ---- Wire up all the buttons ----
-btnUsers.addEventListener('click', () => queryApi('/users'));
-btnUser1.addEventListener('click', () => queryApi('/users/1'));
-btnUser2.addEventListener('click', () => queryApi('/users/2'));
-btnUser3.addEventListener('click', () => queryApi('/users/3'));
+
 btnSendUsers.addEventListener('click', sendUsers);
 btnSendSpecialIdUsers.addEventListener('click', specialId);
 btnSearchById.addEventListener('click', searchById);

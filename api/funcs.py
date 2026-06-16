@@ -17,6 +17,8 @@ class UserWithId(BaseModel):
     age: int
     id: int
 
+
+
 # ---- GET /users → return everyone ----
 @router.get("/users")
 def get_users():
@@ -25,9 +27,12 @@ def get_users():
 # ---- GET /users/42 → return one user by id ----
 @router.get("/users/{user_id}")
 def get_single_user(user_id: int):
+
     if user_id in my_users:
         return {"id": user_id, **my_users[user_id]}
     return {"error": "User not found"}
+
+
 
 # ---- POST /addUser → add a simple user ----
 @router.post("/addUser")
@@ -36,9 +41,15 @@ def add_user(user: User):
     return people
 
 # ---- POST /randomUserId → add a user with a random id ----
+
+#user takes on all the information of UserWithId
+
+
 @router.post("/randomUserId")
 def add_user_with_id(user: UserWithId):
-    if user.id in my_users:
-        return {"error": "ID already taken"}
-    my_users[user.id] = {"name": user.name, "age": user.age}
-    return my_users
+
+    my_users[user.id] = {
+        "name": user.name,
+        "age": user.age
+    }
+   
