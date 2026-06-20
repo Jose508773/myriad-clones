@@ -4,3 +4,5 @@ fastapi
 uvicorn
 # Required by FastAPI to serve static files
 aiofiles
+
+supabase

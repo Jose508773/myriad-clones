@@ -1,4 +1,3 @@
-
 import os
 # Import the main FastAPI app class
 from fastapi import FastAPI
@@ -8,29 +7,35 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 # IMPORTANT: Import the routers from your other Python files
-# We rename them using 'as' so we don't confuse the two 'router' variables
 from api.funcs import router as funcs_router
 
 # Initialize the main application
 app = FastAPI()
 
-# --- CORS Configuration (Same as before) ---
+# --- CORS Configuration ---
+# Allow your production domain as well as local development domains
+origins = [
+    "https://myriad-clones.vercel.app",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://127.0.0.1:5500",  # Live Server
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 # --- Routing Delegation ---
-
-# Tell the main app to include all endpoints from the users.py file
+# This activates your router routes
 app.include_router(funcs_router)
 
 # Mount the static/public directory at the root after other API routes are defined
 # We only do this if the folder exists (e.g. during local development).
-# On Vercel, the root "public" folder is served directly by the CDN, and the folder
-# doesn't exist within the serverless python lambda container.
 if os.path.exists("public"):
     app.mount("/", StaticFiles(directory="public", html=True), name="public")
