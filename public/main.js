@@ -33,10 +33,11 @@ const statusEl = document.getElementById('status');
 const outputEl = document.getElementById('output');
 
 // ---- Config ----
-// Dynamically determine protocol and host so it works both locally (e.g. http://localhost:8000) and deployed on Vercel
-const apiBase = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
-  ? `${window.location.protocol}//${window.location.host}`
-  : "https://myriad-clones.vercel.app";
+// If running locally but on a different port (like Live Server on 5500), point to Uvicorn on 8000.
+// Otherwise, use relative paths ("") so it works on any domain (local 8000, Vercel preview, or production) same-origin.
+const apiBase = window.location.port && window.location.port !== "8000"
+  ? "http://127.0.0.1:8000"
+  : "";
 
 const usedIds = []; // keeps track of all random IDs we've generated
 
