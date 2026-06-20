@@ -66,17 +66,18 @@ def add_user_with_id(user: UserWithId):
 # ─────────────────────────────────────────────
 @router.post("/workers", response_model=Worker)
 def create_worker(worker: WorkerCreate):
-    # .table("workers") targets the table we made in SQL
-    # .insert() sends an INSERT INTO workers (...) VALUES (...) under the hood
-    # worker.dict() converts the Pydantic model into a plain Python dict (JSON-able)
-    response = supabase.table("workers").insert(worker.dict()).execute()
+    try:
+        # worker.model_dump() converts the Pydantic model into a plain Python dict (Pydantic v2)
+        response = supabase.table("workers").insert(worker.model_dump()).execute()
 
-    # Supabase returns a list of inserted rows in response.data
-    # We grab the first (and only) one
-    if not response.data:
-        raise HTTPException(status_code=400, detail="Insert failed")
+        if not response.data:
+            raise HTTPException(status_code=400, detail="Insert failed")
 
-    return response.data[0]
+        return response.data[0]
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ─────────────────────────────────────────────
@@ -84,9 +85,11 @@ def create_worker(worker: WorkerCreate):
 # ─────────────────────────────────────────────
 @router.get("/workers")
 def get_workers():
-    # .select("*") means "give me every column"
-    response = supabase.table("workers").select("*").execute()
-    return response.data   # this is a list of worker dicts
+    try:
+        response = supabase.table("workers").select("*").execute()
+        return response.data   # this is a list of worker dicts
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ─────────────────────────────────────────────
@@ -109,18 +112,22 @@ def get_worker(worker_id: str):
 # ─────────────────────────────────────────────
 @router.put("/workers/{worker_id}")
 def update_worker(worker_id: str, worker: WorkerCreate):
-    # .update() builds an UPDATE workers SET ... WHERE id = worker_id
-    response = (
-        supabase.table("workers")
-        .update(worker.dict())
-        .eq("id", worker_id)
-        .execute()
-    )
+    try:
+        response = (
+            supabase.table("workers")
+            .update(worker.model_dump())
+            .eq("id", worker_id)
+            .execute()
+        )
 
-    if not response.data:
-        raise HTTPException(status_code=404, detail="Worker not found")
+        if not response.data:
+            raise HTTPException(status_code=404, detail="Worker not found")
 
-    return response.data[0]
+        return response.data[0]
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ─────────────────────────────────────────────

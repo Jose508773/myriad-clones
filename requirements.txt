@@ -4,5 +4,5 @@ fastapi
 uvicorn
 # Required by FastAPI to serve static files
 aiofiles
-
-supabase
+# Supabase Python client — pinned to a stable version
+supabase==2.3.5
