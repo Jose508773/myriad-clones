@@ -42,6 +42,40 @@
       <button id="btnSearchById" class="btn">Get User by ID</button>
     </div>
 
+    <!-- ──────────────── Workers Section ──────────────── -->
+    <div class="section-title">Workers (Supabase DB)</div>
+
+    <div class="actions">
+      <button id="btnGetWorkers" class="btn primary-btn">Get All Workers</button>
+    </div>
+
+    <div class="form-container">
+      <h3>Add new Worker</h3>
+      <div class="grid-form">
+        <input type="text" id="workerName" placeholder="Name">
+        <input type="number" id="workerAge" placeholder="Age">
+        <input type="number" step="0.01" id="workerSalary" placeholder="Salary">
+        <input type="text" id="workerPosition" placeholder="Position">
+      </div>
+      <button id="btnAddWorker" class="btn primary-btn" style="width: 100%;">Add Worker</button>
+    </div>
+
+    <div class="form-container">
+      <h3>Manage Worker by ID</h3>
+      <input type="text" id="workerId" placeholder="Worker ID (UUID)">
+      <div class="grid-form" style="margin-top: 0.75rem;">
+        <input type="text" id="editWorkerName" placeholder="New Name">
+        <input type="number" id="editWorkerAge" placeholder="New Age">
+        <input type="number" step="0.01" id="editWorkerSalary" placeholder="New Salary">
+        <input type="text" id="editWorkerPosition" placeholder="New Position">
+      </div>
+      <div class="btn-group">
+        <button id="btnGetWorker" class="btn">Get Worker</button>
+        <button id="btnUpdateWorker" class="btn">Update Worker</button>
+        <button id="btnDeleteWorker" class="btn danger-btn">Delete Worker</button>
+      </div>
+    </div>
+
     <div class="result-container">
       <div class="result-header">
         <span>Response Output</span>

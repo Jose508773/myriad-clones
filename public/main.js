@@ -1,5 +1,6 @@
 // ---- Grab all elements from the HTML by their id ----
 
+// Local Users elements
 const nameInput = document.getElementById('nameInput');
 const ageInput = document.getElementById('ageInput');
 const btnSendUsers = document.getElementById('sendUsers');
@@ -8,13 +9,36 @@ const userAgeInput = document.getElementById('userAgeInput');
 const btnSendSpecialIdUsers = document.getElementById('sendSpecialIdUsers');
 const searchIdInput = document.getElementById('searchIdInput');
 const btnSearchById = document.getElementById('btnSearchById');
+
+// Workers elements
+const btnGetWorkers = document.getElementById('btnGetWorkers');
+const workerName = document.getElementById('workerName');
+const workerAge = document.getElementById('workerAge');
+const workerSalary = document.getElementById('workerSalary');
+const workerPosition = document.getElementById('workerPosition');
+const btnAddWorker = document.getElementById('btnAddWorker');
+
+const workerId = document.getElementById('workerId');
+const editWorkerName = document.getElementById('editWorkerName');
+const editWorkerAge = document.getElementById('editWorkerAge');
+const editWorkerSalary = document.getElementById('editWorkerSalary');
+const editWorkerPosition = document.getElementById('editWorkerPosition');
+
+const btnGetWorker = document.getElementById('btnGetWorker');
+const btnUpdateWorker = document.getElementById('btnUpdateWorker');
+const btnDeleteWorker = document.getElementById('btnDeleteWorker');
+
+// Shared elements
 const statusEl = document.getElementById('status');
 const outputEl = document.getElementById('output');
 
 // ---- Config ----
-const url = "myriad-clones.vercel.app";
-const usedIds = []; // keeps track of all random IDs we've generated
+// Dynamically determine protocol and host so it works both locally (e.g. http://localhost:8000) and deployed on Vercel
+const apiBase = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+  ? `${window.location.protocol}//${window.location.host}`
+  : "https://myriad-clones.vercel.app";
 
+const usedIds = []; // keeps track of all random IDs we've generated
 
 // ---- Helper: shows the result on screen ----
 function showResult(response, data) {
@@ -39,7 +63,7 @@ function showLoading(msg) {
 async function queryApi(endpoint) {
   showLoading('Fetching data...');
   try {
-    const response = await fetch(`https://${url}${endpoint}`);
+    const response = await fetch(`${apiBase}${endpoint}`);
     const data = await response.json();
     showResult(response, data);
   } catch (error) {
@@ -51,7 +75,7 @@ async function queryApi(endpoint) {
 async function sendUsers() {
   showLoading('Sending user data...');
   try {
-    const response = await fetch(`https://${url}/addUser`, {
+    const response = await fetch(`${apiBase}/addUser`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -77,7 +101,7 @@ async function specialId() {
 
   showLoading('Sending special user data...');
   try {
-    const response = await fetch(`https://${url}/randomUserId`, {
+    const response = await fetch(`${apiBase}/randomUserId`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -108,8 +132,94 @@ async function searchById() {
   await queryApi(`/users/${id}`);
 }
 
-// ---- Wire up all the buttons ----
+// ─────────────────────────────────────────────
+// Workers Handlers (Supabase DB)
+// ─────────────────────────────────────────────
 
+// Add a Worker
+async function addWorker() {
+  showLoading('Creating worker in Supabase...');
+  try {
+    const response = await fetch(`${apiBase}/workers`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: workerName.value,
+        age: parseInt(workerAge.value) || 0,
+        salary: parseFloat(workerSalary.value) || 0.0,
+        position: workerPosition.value
+      })
+    });
+    const data = await response.json();
+    showResult(response, data);
+  } catch (error) {
+    showError(error);
+  }
+}
+
+// Get Worker by ID
+async function getWorkerById() {
+  const id = workerId.value;
+  if (!id) {
+    outputEl.innerText = '// Please enter a Worker UUID.';
+    return;
+  }
+  await queryApi(`/workers/${id}`);
+}
+
+// Update Worker by ID
+async function updateWorkerById() {
+  const id = workerId.value;
+  if (!id) {
+    outputEl.innerText = '// Please enter a Worker UUID.';
+    return;
+  }
+  showLoading(`Updating worker ${id} in Supabase...`);
+  try {
+    const response = await fetch(`${apiBase}/workers/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: editWorkerName.value,
+        age: parseInt(editWorkerAge.value) || 0,
+        salary: parseFloat(editWorkerSalary.value) || 0.0,
+        position: editWorkerPosition.value
+      })
+    });
+    const data = await response.json();
+    showResult(response, data);
+  } catch (error) {
+    showError(error);
+  }
+}
+
+// Delete Worker by ID
+async function deleteWorkerById() {
+  const id = workerId.value;
+  if (!id) {
+    outputEl.innerText = '// Please enter a Worker UUID.';
+    return;
+  }
+  showLoading(`Deleting worker ${id} from Supabase...`);
+  try {
+    const response = await fetch(`${apiBase}/workers/${id}`, {
+      method: "DELETE"
+    });
+    const data = await response.json();
+    showResult(response, data);
+  } catch (error) {
+    showError(error);
+  }
+}
+
+// ---- Wire up all the buttons ----
 btnSendUsers.addEventListener('click', sendUsers);
 btnSendSpecialIdUsers.addEventListener('click', specialId);
 btnSearchById.addEventListener('click', searchById);
+
+// Workers event listeners
+btnGetWorkers.addEventListener('click', () => queryApi('/workers'));
+btnAddWorker.addEventListener('click', addWorker);
+btnGetWorker.addEventListener('click', getWorkerById);
+btnUpdateWorker.addEventListener('click', updateWorkerById);
+btnDeleteWorker.addEventListener('click', deleteWorkerById);

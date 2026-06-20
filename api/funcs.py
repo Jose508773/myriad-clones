@@ -1,5 +1,7 @@
 from pydantic import BaseModel
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
+from api.db import supabase          # our shared Supabase client
+from api.models import WorkerCreate, Worker
 
 router = APIRouter()
 
@@ -55,14 +57,9 @@ def add_user_with_id(user: UserWithId):
    
 
 
+
 # File: api/funcs.py
 # This is your router file, imported into index.py as 'funcs_router'
-
-from fastapi import APIRouter, HTTPException
-from api.db import supabase          # our shared Supabase client
-from api.models import WorkerCreate, Worker
-
-router = APIRouter()
 
 # ─────────────────────────────────────────────
 # CREATE — POST /workers
